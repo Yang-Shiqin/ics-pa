@@ -1,6 +1,7 @@
 #include <isa.h>
 #include <memory/paddr.h>
 
+// 用户程序
 static const uint8_t img []  = {
   0xb8, 0x34, 0x12, 0x00, 0x00,        // 100000:  movl  $0x1234,%eax
   0xb9, 0x27, 0x00, 0x10, 0x00,        // 100005:  movl  $0x100027,%ecx
@@ -19,13 +20,13 @@ static void restart() {
 }
 
 void init_isa() {
-  /* Test the implementation of the `CPU_state' structure. */
+  /* Test the implementation of the `CPU_state' structure. */ // 测试ysq实现的寄存器结构体是否正确
   void reg_test();
   reg_test();
 
-  /* Load built-in image. */
+  /* Load built-in image. */ // 将用户程序读到固定位置即IMAGE_START使CPU执行
   memcpy(guest_to_host(IMAGE_START), img, sizeof(img));
 
-  /* Initialize this virtual computer system. */
+  /* Initialize this virtual computer system. */ // 初始化寄存器
   restart();
 }

@@ -33,6 +33,7 @@ static inline void welcome() {
   printf("For help, type \"help\"\n");
 }
 
+// 将用户程序加载到内存中，返回程序大小
 static inline long load_img() {
   if (img_file == NULL) {
     Log("No image is given. Use the default build-in image.");
