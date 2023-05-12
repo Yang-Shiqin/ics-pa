@@ -1,7 +1,9 @@
 NAME = nemu
 
+# 条件赋值，即默认为x86
 ISA ?= x86
 ISAS = $(shell ls src/isa/)
+# $(ISA)在$(ISAS)中的元素和空字符串比较
 ifeq ($(filter $(ISAS), $(ISA)), ) # ISA must be valid
 $(error Invalid ISA. Supported: $(ISAS))
 endif
