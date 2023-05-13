@@ -87,6 +87,7 @@ static int cmd_help(char *args) {
 
 static int cmd_si(char *args){
   char* args_end = args+strlen(args);
+  printf("%p \n", args_end);
   // if (nemu_state.state!=NEMU_RUNNING || nemu_state.state!=NEMU_STOP){   /*程序不在跑*/
   //   printf("The program is not being run.\n");
   //   return 0;
