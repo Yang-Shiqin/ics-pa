@@ -99,24 +99,18 @@ static int cmd_si(char *args){
   char* second_args = arg+strlen(arg)+1;
   if(second_args < args_end){         /*参数多于1个*/
     printf("A syntax error in expression, near `%s'\n", second_args);
-    return 0;
-    return -1;
+  }else if(arg[0]<'0' || arg[0]>'9'){ /*非数字符号开头*/ 
+    printf("No symbol \"%s\" in current context.\n", arg);
+  }else{
+    char *str_end=NULL;
+    int step = strtol(arg, &str_end, 0);
+    if(str_end!=arg+strlen(arg)){     /*数字开头的非数*/
+      printf("Invalid number \"%s\".\n", arg);
+    }else{                            /*正常*/
+      cpu_exec(step>0?step:0);        // 执行max(0, step)步
+    }
   }
-  if(arg[0]<'0' || arg[0]>'9'){       /*非数字符号开头*/ 
-    printf("No symbol \"%s\" in current context.", arg);
-    return 0;
-    return -1;
-  }
-  char *str_end=NULL;
-  int step = strtol(arg, &str_end, 0);
-  if(str_end!=arg+strlen(arg)){       /*数字开头的非数*/
-    printf("Invalid number \"%s\".", arg);
-    return 0;
-    return -1;
-  }else{                              /*正常*/
-    cpu_exec(step>0?step:0);          // 执行max(0, step)步
-    return 0;
-  }
+  return 0;
 }
 
 void ui_mainloop() {
