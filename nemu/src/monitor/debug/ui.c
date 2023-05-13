@@ -1,7 +1,6 @@
 #include <isa.h>
 #include "expr.h"
 #include "watchpoint.h"
-#include <monitor/monitor.h>
 
 #include <stdlib.h>
 #include <readline/readline.h>
@@ -87,34 +86,34 @@ static int cmd_help(char *args) {
 
 
 static int cmd_si(char *args){
-  // char* args_end = args+strlen(args);
+  char* args_end = args+strlen(args);
   // if (nemu_state.state!=NEMU_RUNNING || nemu_state.state!=NEMU_STOP){   /*程序不在跑*/
   //   printf("The program is not being run.\n");
   //   return 0;
   // }
-  cpu_exec(0);
-  return 0;
-  // char *arg = strtok(NULL, " ");
-  // if(arg == NULL){                    /*没参数，默认N=1*/
-  //   return 1;
-  // }
-  // char* second_args = arg+strlen(arg)+1;
-  // if(second_args < args_end){         /*参数多于1个*/
-  //   printf("A syntax error in expression, near `%s'\n", second_args);
-  //   return 0;
-  // }
-  // if(arg[0]<'0' || arg[0]>'9'){       /*非数字符号开头*/ 
-  //   printf("No symbol \"%s\" in current context.", arg);
-  //   return 0;
-  // }
-  // char *str_end=NULL;
-  // int step = strtol(arg, &str_end, 0);
-  // if(str_end!=arg+strlen(arg)){       /*数字开头的非数*/
-  //   printf("Invalid number \"%s\".", arg);
-  //   return 0;
-  // }else{                              /*正常*/
-  //   return step>0?step:0;             // 执行max(0, step)步
-  // }
+  char *arg = strtok(NULL, " ");
+  if(arg == NULL){                    /*没参数，默认N=1*/
+    cpu_exec(1);
+    return 0;
+  }
+  char* second_args = arg+strlen(arg)+1;
+  if(second_args < args_end){         /*参数多于1个*/
+    printf("A syntax error in expression, near `%s'\n", second_args);
+    return -1;
+  }
+  if(arg[0]<'0' || arg[0]>'9'){       /*非数字符号开头*/ 
+    printf("No symbol \"%s\" in current context.", arg);
+    return -1;
+  }
+  char *str_end=NULL;
+  int step = strtol(arg, &str_end, 0);
+  if(str_end!=arg+strlen(arg)){       /*数字开头的非数*/
+    printf("Invalid number \"%s\".", arg);
+    return -1;
+  }else{                              /*正常*/
+    cpu_exec(step>0?step:0);          // 执行max(0, step)步
+    return 0;
+  }
 }
 
 void ui_mainloop() {
