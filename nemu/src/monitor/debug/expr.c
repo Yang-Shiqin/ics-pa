@@ -22,11 +22,11 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},    // spaces  匹配一个或多个(+)空格
+  {"\\d+", TK_DNUM},    // 十进制数
   {"\\+", '+'},         // plus    匹配加号
   {"\\-", '-'},         // sub
   {"\\*", '*'},         // mul
   {"/", '/'},           // div
-  {"\\d+", TK_DNUM},    // 十进制数
   {"==", TK_EQ},        // equal
 };
 
@@ -133,7 +133,7 @@ word_t expr(char *e, bool *success) {
   /* TODO: Insert codes to evaluate the expression. */
   TODO();
   int i;
-  for(i=0; i<32; i++){
+  for(i=0; i<nr_token; i++){
     printf("%s ", tokens[i].str);
   }
 
