@@ -1,5 +1,6 @@
 #include <isa.h>
 #include "expr.h"
+#include <monitor/monitor.h>
 #include "watchpoint.h"
 
 #include <stdlib.h>
@@ -87,10 +88,10 @@ static int cmd_help(char *args) {
 
 static int cmd_si(char *args){
   char* args_end = args+strlen(args);
-  // if (/*程序不在跑*/){
-  //   printf("The program is not being run.\n");
-  //   return 0;
-  // }
+  if (nemu_state.state!=NEMU_RUNNING || nemu_state.state!=NEMU_STOP){   /*todo:  程序不在跑*/
+    printf("The program is not being run.\n");
+    return 0;
+  }
   char *arg = strtok(NULL, " ");
   if(arg == NULL){                    /*没参数，默认N=1*/
     return 1;
