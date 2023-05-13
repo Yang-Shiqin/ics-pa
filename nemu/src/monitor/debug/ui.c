@@ -86,18 +86,17 @@ static int cmd_help(char *args) {
 
 
 static int cmd_si(char *args){
-  char* args_end = args+strlen(args);
   // if (nemu_state.state!=NEMU_RUNNING || nemu_state.state!=NEMU_STOP){   /*程序不在跑*/
   //   printf("The program is not being run.\n");
   //   return 0;
   // }
-  char *arg = strtok(NULL, " ");
-  if(arg == NULL){                    /*没参数，默认N=1*/
+  if(args == NULL){                    /*没参数，默认N=1*/
     cpu_exec(1);
     return 0;
   }
+  char* args_end = args+strlen(args);
+  char *arg = strtok(NULL, " ");
   char* second_args = arg+strlen(arg)+1;
-  return 0;
   printf("%p \n", args_end);
   if(second_args < args_end){         /*参数多于1个*/
     printf("sdf\n");
