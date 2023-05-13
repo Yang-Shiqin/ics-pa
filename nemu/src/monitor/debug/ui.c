@@ -92,11 +92,11 @@ static int cmd_si(char *args){
   //   return 0;
   // }
   char *arg = strtok(NULL, " ");
-  return 0;
   if(arg == NULL){                    /*没参数，默认N=1*/
     cpu_exec(1);
     return 0;
   }
+  return 0;
   char* second_args = arg+strlen(arg)+1;
   if(second_args < args_end){         /*参数多于1个*/
     printf("A syntax error in expression, near `%s'\n", second_args);
