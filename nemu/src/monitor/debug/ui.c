@@ -97,7 +97,7 @@ static int cmd_si(char *args){
     return 0;
   }
   char* second_args = arg+strlen(arg)+1;
-  printf("%p %p\n", second_args, args_end);
+  printf("%p \n", args_end);
   return 0;
   if(second_args < args_end){         /*参数多于1个*/
     printf("sdf\n");
