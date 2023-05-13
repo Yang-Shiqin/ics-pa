@@ -39,7 +39,7 @@ static int cmd_q(char *args) {
 
 // 通过ui_mainloop可知args就是除去第一个子字符串剩下的字符串
 static int cmd_help(char *args);
-// static int cmd_si(char *args);
+static int cmd_si(char *args);
 // static int cmd_info(char *args);
 // static int cmd_x(char *args);
 
@@ -51,7 +51,7 @@ static struct {
   { "help", "Display informations about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-  // { "si", "step one instruction exactly", cmd_si },
+  { "si", "step one instruction exactly", cmd_si },
 //   { "info", "generic cmd for showing things about the program being debugged", cmd_info },
 //   { "x", "examine memory", cmd_x },
 
@@ -85,32 +85,34 @@ static int cmd_help(char *args) {
 }
 
 
-// static int cmd_si(char *args){
-//   int args_end = args+strlen(args);
-//   if (/*程序不在跑*/){
-//     printf("The program is not being run.\n");
-//     return 0;
-//   }
-//   char *arg = strtok(NULL, " ");
-//   int step;
-//   if(arg == NULL){  /*没参数，默认N=1*/
-//     return 1;
-//   }
-//   int second_args = arg+strlen(arg)+1;
-//   if(second_args < args_end){         /*参数多于1个*/
-//     printf("A syntax error in expression, near `%s'\n", second_args);
-//     return 0;
-//   }
-
-//   if(/*数字开头的非数*/){
-//     printf("Invalid number \"%s\".", arg);
-//   }else if(/*其他非数字符号*/){
-//     printf("No symbol \"%s\" in current context.", arg);
-//   }else if(/*正常*/){
-//     step = /*解析数字，包括其他进制*/;
-//   }
-//   // 执行step步
-// }
+static int cmd_si(char *args){
+  char* args_end = args+strlen(args);
+  // if (/*程序不在跑*/){
+  //   printf("The program is not being run.\n");
+  //   return 0;
+  // }
+  char *arg = strtok(NULL, " ");
+  if(arg == NULL){                    /*没参数，默认N=1*/
+    return 1;
+  }
+  char* second_args = arg+strlen(arg)+1;
+  if(second_args < args_end){         /*参数多于1个*/
+    printf("A syntax error in expression, near `%s'\n", second_args);
+    return 0;
+  }
+  if(arg[0]<'0' || arg[0]>'9'){       /*非数字符号开头*/ 
+    printf("No symbol \"%s\" in current context.", arg);
+    return 0;
+  }
+  char *str_end=NULL;
+  int step = strtol(arg, &str_end, 0);
+  if(str_end!=arg+strlen(arg)){       /*数字开头的非数*/
+    printf("Invalid number \"%s\".", arg);
+    return 0;
+  }else{                              /*正常*/
+    return step>0?step:0;             // 执行max(0, step)步
+  }
+}
 
 void ui_mainloop() {
   if (is_batch_mode()) {
