@@ -99,7 +99,7 @@ static int cmd_si(char *args){
   char* second_args = arg+strlen(arg)+1;
   if(second_args < args_end){         /*参数多于1个*/
     printf("A syntax error in expression, near `%s'\n", second_args);
-  }else if(arg[0]<'0' || arg[0]>'9'){ /*非数字符号开头*/ 
+  }else if(((arg[0]!='-')&&(arg[0]<'0'||arg[0]>'9')) || ((arg[0]=='-')&&(arg[1]<'0'||arg[1]>'9'))){ /*非数字符号开头*/ 
     printf("No symbol \"%s\" in current context.\n", arg);
   }else{
     char *str_end=NULL;
