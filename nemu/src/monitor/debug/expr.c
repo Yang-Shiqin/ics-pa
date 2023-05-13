@@ -26,7 +26,7 @@ static struct rule {
   {"\\-", '-'},         // sub
   {"\\*", '*'},         // mul
   {"/", '/'},           // div
-  {"\\\\d+", TK_DNUM},    // 十进制数
+  {"[0-9]+", TK_DNUM},    // 十进制数
   {"==", TK_EQ},        // equal
 };
 
