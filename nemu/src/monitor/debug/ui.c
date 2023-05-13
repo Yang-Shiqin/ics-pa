@@ -54,6 +54,7 @@ static struct {
   { "si", "step one instruction exactly", cmd_si },
   { "info", "generic cmd for showing things about the program being debugged: info r/info w", cmd_info },
 //   { "x", "examine memory", cmd_x },
+//   { "p", "examine memory", cmd_x },
 
   /* TODO: Add more commands */
 

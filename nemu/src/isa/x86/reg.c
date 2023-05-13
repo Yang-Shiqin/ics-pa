@@ -41,13 +41,13 @@ void reg_test() {
   assert(pc_sample == cpu.pc);
 }
 
-// info r: 打印寄存器信息(ysq)
+// info r: 打印寄存器信息(ysq)    // 2023/5/13/15:42
 void isa_reg_display() {
   int i;
   for(i = R_EAX; i <= R_EDI; i ++){
-    printf("%-8s0x%-16x%-16u\n", regsl[i], cpu.gpr[i]._32, cpu.gpr[i]._32);
+    printf("%-16s0x%-16x%-16u\n", regsl[i], cpu.gpr[i]._32, cpu.gpr[i]._32);
   }
-  printf("%-8s0x%-16x0x%-16x\n", "pc", cpu.pc, cpu.pc);
+  printf("%-16s0x%-16x0x%-16x\n", "pc", cpu.pc, cpu.pc);
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
