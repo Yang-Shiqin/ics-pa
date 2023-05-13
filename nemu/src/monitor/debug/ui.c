@@ -42,6 +42,7 @@ static int cmd_help(char *args);
 static int cmd_si(char *args);    // [x] 2023/5/13/14:20
 static int cmd_info(char *args);  
 // static int cmd_x(char *args);
+// static int cmd_p(char *args);
 
 static struct {
   char *name;
@@ -54,7 +55,7 @@ static struct {
   { "si", "step one instruction exactly", cmd_si },
   { "info", "generic cmd for showing things about the program being debugged: info r/info w", cmd_info },
 //   { "x", "examine memory", cmd_x },
-//   { "p", "examine memory", cmd_x },
+//   { "p", "Print value of expression EXP.", cmd_p },
 
   /* TODO: Add more commands */
 
@@ -126,6 +127,10 @@ static int cmd_info(char *args){
     printf("Undefined info command: \"%s\".  Try \"help info\"\n", args);
   return 0;
 }
+
+// static int cmd_p(char *args){
+//   return 0;
+// }
 
 void ui_mainloop() {
   if (is_batch_mode()) {

@@ -7,7 +7,7 @@
 
 enum {
   TK_NOTYPE = 256, TK_EQ,
-
+  TK_DNUM,
   /* TODO: Add more token types */
 
 };
@@ -21,8 +21,12 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
 
-  {" +", TK_NOTYPE},    // spaces
-  {"\\+", '+'},         // plus
+  {" +", TK_NOTYPE},    // spaces  匹配一个或多个(+)空格
+  {"\\+", '+'},         // plus    匹配加号
+  {"\\-", '-'},         // sub
+  {"\\*", '*'},         // mul
+  {"/", '/'},           // div
+  {"\\d+", TK_DNUM},    // 十进制数
   {"==", TK_EQ},        // equal
 };
 
@@ -65,9 +69,9 @@ static bool make_token(char *e) {
   while (e[position] != '\0') {
     /* Try all rules one by one. */
     for (i = 0; i < NR_REGEX; i ++) {
-      if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
-        char *substr_start = e + position;
-        int substr_len = pmatch.rm_eo;
+      if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) { // 在开头匹配到re[i]
+        char *substr_start = e + position;  // 子串开始
+        int substr_len = pmatch.rm_eo;      // 子串长度
 
         Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
             i, rules[i].regex, position, substr_len, substr_len, substr_start);
@@ -80,6 +84,29 @@ static bool make_token(char *e) {
          */
 
         switch (rules[i].token_type) {
+          case TK_NOTYPE:
+            break;
+          case '+':
+            tokens[nr_token].type = '+';
+            strcpy(tokens[nr_token++].str, "+");
+            break;
+          case '-':
+            tokens[nr_token].type = '-';
+            strcpy(tokens[nr_token++].str, "-");
+            break;
+          case '*':
+            tokens[nr_token].type = '*';
+            strcpy(tokens[nr_token++].str, "*");
+            break;
+          case '/':
+            tokens[nr_token].type = '/';
+            strcpy(tokens[nr_token++].str, "/");
+            break;
+          case TK_DNUM:
+            tokens[nr_token].type = TK_DNUM;
+            strncpy(tokens[nr_token].str, substr_start, substr_len);
+            tokens[nr_token++].str[substr_len] = '\0';
+            break;
           default: TODO();
         }
 
@@ -105,6 +132,10 @@ word_t expr(char *e, bool *success) {
 
   /* TODO: Insert codes to evaluate the expression. */
   TODO();
+  int i;
+  for(i=0; i<32; i++){
+    printf("%s ", tokens[i].str);
+  }
 
   return 0;
 }
