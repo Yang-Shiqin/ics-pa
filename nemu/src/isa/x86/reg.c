@@ -45,8 +45,9 @@ void reg_test() {
 void isa_reg_display() {
   int i;
   for(i = R_EAX; i <= R_EDI; i ++){
-    printf("%s\t\t%x\t\t%u\n", regsl[i], cpu.gpr[i]._32, cpu.gpr[i]._32);
+    printf("%8s0x%16x\t\t%16u\n", regsl[i], cpu.gpr[i]._32, cpu.gpr[i]._32);
   }
+  printf("%8s0x%16x\t\t0x%16x\n", "pc", cpu.pc, cpu.pc);
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
