@@ -26,7 +26,9 @@ static struct rule {
   {"\\-", '-'},         // sub
   {"\\*", '*'},         // mul
   {"/", '/'},           // div
-  {"[0-9]+", TK_DNUM},    // 十进制数
+  {"[0-9]+", TK_DNUM},  // 十进制数
+  {"(", '('},           // 左括号
+  {")", ')'},           // 右括号
   {"==", TK_EQ},        // equal
 };
 
@@ -109,7 +111,6 @@ static bool make_token(char *e) {
             break;
           default: TODO();
         }
-
         break;
       }
     }
