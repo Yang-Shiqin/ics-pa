@@ -96,12 +96,12 @@ static int cmd_si(char *args){
     cpu_exec(1);
     return 0;
   }
-  return 0;
   char* second_args = arg+strlen(arg)+1;
   if(second_args < args_end){         /*参数多于1个*/
     printf("A syntax error in expression, near `%s'\n", second_args);
     return -1;
   }
+  return 0;
   if(arg[0]<'0' || arg[0]>'9'){       /*非数字符号开头*/ 
     printf("No symbol \"%s\" in current context.", arg);
     return -1;
