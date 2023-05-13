@@ -17,7 +17,7 @@
  * For more details about the register encoding scheme, see i386 manual.
  */
 
-typedef struct {
+typedef struct {  // 2023/5/12/16:09
   union {
     union {
       uint32_t _32;

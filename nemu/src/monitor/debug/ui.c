@@ -39,8 +39,8 @@ static int cmd_q(char *args) {
 
 // 通过ui_mainloop可知args就是除去第一个子字符串剩下的字符串
 static int cmd_help(char *args);
-static int cmd_si(char *args);
-// static int cmd_info(char *args);
+static int cmd_si(char *args);    // [x] 2023/5/13/14:20
+static int cmd_info(char *args);  
 // static int cmd_x(char *args);
 
 static struct {
@@ -52,7 +52,7 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   { "si", "step one instruction exactly", cmd_si },
-//   { "info", "generic cmd for showing things about the program being debugged", cmd_info },
+  { "info", "generic cmd for showing things about the program being debugged: info r/info w", cmd_info },
 //   { "x", "examine memory", cmd_x },
 
   /* TODO: Add more commands */
@@ -109,6 +109,20 @@ static int cmd_si(char *args){
       cpu_exec(step>0?step:0);        // 执行max(0, step)步
     }
   }
+  return 0;
+}
+
+static int cmd_info(char *args){
+  if(args == NULL){                    /*没参数，打印info用法*/
+    cmd_help("info");
+    return 0;
+  }
+  if (strcmp(args, "r") == 0){
+    isa_reg_display();
+  }else if (strcmp(args, "w") == 0){
+    // todo
+  }else
+    printf("Undefined info command: \"%s\".  Try \"help info\"\n", args);
   return 0;
 }
 

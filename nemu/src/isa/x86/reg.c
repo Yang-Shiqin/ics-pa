@@ -41,7 +41,12 @@ void reg_test() {
   assert(pc_sample == cpu.pc);
 }
 
+// info r: 打印寄存器信息(ysq)
 void isa_reg_display() {
+  int i;
+  for(i = R_EAX; i <= R_EDI; i ++){
+    printf("%s\t\t%x\t\t%u\n", regsl[i], cpu.gpr[i]._32, cpu.gpr[i]._32);
+  }
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
