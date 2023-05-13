@@ -97,8 +97,8 @@ static int cmd_si(char *args){
     return 0;
   }
   char* second_args = arg+strlen(arg)+1;
-  printf("%p \n", args_end);
   return 0;
+  printf("%p \n", args_end);
   if(second_args < args_end){         /*参数多于1个*/
     printf("sdf\n");
     printf("A syntax error in expression, near `%s'\n", second_args);
