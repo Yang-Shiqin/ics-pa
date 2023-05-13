@@ -92,7 +92,7 @@ static int cmd_si(char *args){
   //   printf("The program is not being run.\n");
   //   return 0;
   // }
-  cpu_exec(-1);
+  cpu_exec(0);
   return 0;
   // char *arg = strtok(NULL, " ");
   // if(arg == NULL){                    /*没参数，默认N=1*/
