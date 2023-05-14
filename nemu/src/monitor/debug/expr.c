@@ -93,7 +93,7 @@ bool check_parentheses(int p, int q, bool *err){
       break;
     default:
       if (i==q) flag=false; // 第一个不是(
-      continue;
+      break;
     }
   }
   return flag;
