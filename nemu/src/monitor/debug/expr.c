@@ -170,6 +170,7 @@ int eval(int p, int q, bool *err) {
     }
     int val1 = eval(p, op - 1, err);
     int val2 = eval(op + 1, q, err);
+    printf("val1=%d, val2=%d\n", val1, val2);
 
     switch (tokens[op].type) {
       case '+': return val1 + val2;
