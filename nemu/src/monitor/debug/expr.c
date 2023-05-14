@@ -99,7 +99,7 @@ bool check_parentheses(int p, int q, bool *err){
   return flag;
 }
 
-
+// p 1+--(2+34)
 // ysq  // 2023/5/14/11:41
 // 解析表达式（暂时只考虑数字、括号、+-*/
 // p: 表达式开头，tokens下标
@@ -138,6 +138,7 @@ int eval(int p, int q, bool *err) {
     if (*err==true) {
       return 0;
     }
+    if (tokens[p].type=='+') return eval(p+1, q, err);   // +expr
     if (tokens[p].type=='-') return -eval(p+1, q, err);  // -expr
     int op = -1;
     int top = -1; // 在括号里
@@ -155,7 +156,8 @@ int eval(int p, int q, bool *err) {
       case '+':
       case '-':
         if (top == -1){ // 括号外
-          op = i;
+          while(i>-1 && (tokens[i].type=='+'||tokens[i].type=='-'||tokens[i].type=='*'||tokens[i].type=='/')) i--;
+          op = i+1;
           quit=1;
         }
         break;
