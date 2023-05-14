@@ -96,6 +96,7 @@ bool check_parentheses(int p, int q, bool *err){
       continue;
     }
   }
+  printf("flag=%d", flag);
   return flag;
 }
 
