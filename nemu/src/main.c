@@ -12,6 +12,8 @@ int main(int argc, char *argv[]) {
   /* test expr */
   FILE *fp;
   char str[512];
+  int c=0;
+  bool tmp=true;
 
   // 打开文件
   fp = fopen("input", "r");
@@ -22,7 +24,12 @@ int main(int argc, char *argv[]) {
 
   // 读取文件并以空格为分隔符
   while (fscanf(fp, "%s", str) != EOF) {
-    printf("%s\n", str);
+    c = !c;
+    if(c){
+      expr(str, &tmp);
+    }else{
+      printf("ans = %s\n", str);
+    }
   }
 
   // 关闭文件
