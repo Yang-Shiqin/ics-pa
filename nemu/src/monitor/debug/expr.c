@@ -120,7 +120,7 @@ int eval(int p, int q, bool *err) {
      * For now this token should be a number.
      * Return the value of the number.
      */
-    if ((tokens[p].type!=TK_XNUM)||(tokens[p].type!=TK_ONUM)||(tokens[p].type!=TK_DNUM)){ // 非数
+    if ((tokens[p].type!=TK_XNUM)&&(tokens[p].type!=TK_ONUM)&&(tokens[p].type!=TK_DNUM)){ // 非数
       printf("Single token but not num\n");
       *err = true;
       return 0;
@@ -255,6 +255,5 @@ word_t expr(char *e, bool *success) {
   static uint32_t No=0;
   bool err=0;
   printf("$%u=%d\n", ++No, eval(0, nr_token, &err));
-
   return 0;
 }
