@@ -12,6 +12,8 @@ int is_exit_status_bad();
 
 int main(int argc, char *argv[]) {
 #if TEST_EXPR
+  /* Initialize the monitor. */
+  init_monitor(argc, argv);
   /* test expr */
   FILE *fp;
   char str[1024]={0};
