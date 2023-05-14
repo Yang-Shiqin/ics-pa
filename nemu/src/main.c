@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
   FILE *fp;
   char str[1024];
   int c=0;
-  bool tmp=true;
+  // bool tmp=true;
 
   // 打开文件
   fp = fopen("input", "r");
@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
   while (fscanf(fp, "%s", str) != EOF) {
     c = !c;
     if(c){
-      expr(str, &tmp);
+      // expr(str, &tmp);
     }else{
       printf("ans = %s\n", str);
     }
