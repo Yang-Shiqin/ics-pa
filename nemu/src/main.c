@@ -14,8 +14,6 @@ int main(int argc, char *argv[]) {
   /* Initialize the monitor. */
   init_monitor(argc, argv);
 
-  /* Start engine. */
-  engine_start();
 #if TEST_EXPR
   /* test expr */
   FILE *fp;
@@ -43,9 +41,11 @@ int main(int argc, char *argv[]) {
 
   // 关闭文件
   fclose(fp);
-  // expr
+  return 0;
 #else 
 
+  /* Start engine. */
+  engine_start();
   return is_exit_status_bad();
 #endif
 }
