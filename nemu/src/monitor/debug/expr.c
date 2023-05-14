@@ -138,8 +138,8 @@ int eval(int p, int q, bool *err) {
     if (*err==true) {
       return 0;
     }
-    if (tokens[p].type=='+') return eval(p+1, q, err);   // +expr
-    if (tokens[p].type=='-') return -eval(p+1, q, err);  // -expr
+    // if (tokens[p].type=='+') return eval(p+1, q, err);   // +expr
+    // if (tokens[p].type=='-') return -eval(p+1, q, err);  // -expr
     int op = -1;
     int top = -1; // 在括号里
     int i;
@@ -171,7 +171,8 @@ int eval(int p, int q, bool *err) {
         continue;
       }
     }
-    int val1 = eval(p, op - 1, err);
+    int val1 = 0;
+    if (op!=p || (tokens[op].type!='+'||tokens[op].type!='-')) eval(p, op - 1, err);
     int val2 = eval(op + 1, q, err);
 
     switch (tokens[op].type) {
