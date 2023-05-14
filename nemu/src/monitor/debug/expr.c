@@ -100,7 +100,7 @@ bool check_parentheses(int p, int q, bool *err){
 }
 
 
-// ysq  // 2023/5/14/10:47
+// ysq  // 2023/5/14/11:41
 // 解析表达式（暂时只考虑数字、括号、+-*/
 // p: 表达式开头，tokens下标
 // q: 表达式结尾，包括q的token
@@ -115,7 +115,7 @@ int eval(int p, int q, bool *err) {
     *err = true;
     return 0;
   }
-  else if (p == q) {
+  else if (p == q) {  // num
     /* Single token.
      * For now this token should be a number.
      * Return the value of the number.
@@ -128,16 +128,17 @@ int eval(int p, int q, bool *err) {
     // str2num
     return strtol(tokens[p].str, NULL, 0);
   }
-  else if (check_parentheses(p, q, err) == true) {
+  else if (check_parentheses(p, q, err) == true) {  // (expr)
     /* The expression is surrounded by a matched pair of parentheses.
      * If that is the case, just throw away the parentheses.
      */
     return eval(p + 1, q - 1, err);
   }
-  else {
+  else {  // expr
     if (*err==true) {
       return 0;
     }
+    if (tokens[p].type=='-') return -eval(p+1, q, err);  // -expr
     int op = -1;
     int top = -1; // 在括号里
     int i;
