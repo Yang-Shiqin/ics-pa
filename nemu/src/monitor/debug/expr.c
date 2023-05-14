@@ -1,5 +1,4 @@
 #include <isa.h>
-
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
  */
@@ -121,18 +120,39 @@ int eval(int p, int q, bool *err) {
     *err = true;
     return 0;
   }
-  else if (p == q) {  // num
+  else if (p == q) {  // num或寄存器变量
     /* Single token.
      * For now this token should be a number.
      * Return the value of the number.
      */
-    if ((tokens[p].type!=TK_XNUM)&&(tokens[p].type!=TK_ONUM)&&(tokens[p].type!=TK_DNUM)){ // 非数
-      printf("Single token but not num\n");
+    if ((tokens[p].type!=TK_XNUM)&&(tokens[p].type!=TK_ONUM)&&(tokens[p].type!=TK_DNUM)&&(tokens[p].type!=TK_REG)){ // 非数
+      printf("Single token but not num or reg\n");
       *err = true;
       return 0;
     }
     // str2num
-    return strtol(tokens[p].str, NULL, 0);
+    if (tokens[p].type==TK_REG){
+      const char *regsl[] = {"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi"};
+      const char *regsw[] = {"ax", "cx", "dx", "bx", "sp", "bp", "si", "di"};
+      const char *regsb[] = {"al", "cl", "dl", "bl", "ah", "ch", "dh", "bh"};
+      int i;
+      for (i=0; i<8; i++){
+        if (strcmp(tokens[p].str, regsl[i])==0){
+          return cpu.gpr[i]._32;
+        }
+        if (strcmp(tokens[p].str, regsw[i])==0){
+          return cpu.gpr[i]._16;
+        }
+        if (strcmp(tokens[p].str, regsb[i])==0){
+          return cpu.gpr[i/2]._8[i%2];
+        }
+      }
+      *err = true;
+      printf("No reg named %s\n", tokens[p].str);
+      return 0;
+    }else{
+      return strtol(tokens[p].str, NULL, 0);
+    }
   }
   else if (check_parentheses(p, q, err) == true) {  // (expr)
     /* The expression is surrounded by a matched pair of parentheses.
