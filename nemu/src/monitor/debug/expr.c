@@ -218,6 +218,7 @@ static bool make_token(char *e) {
           case '/':
           case '(':
           case ')':
+            printf("%d\n", tokens[nr_token].type);
             nr_token++;
             break;
           case TK_XNUM:
