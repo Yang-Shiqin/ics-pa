@@ -27,7 +27,6 @@ int main(int argc, char *argv[]) {
     c = !c;
     if(c){
       printf("%s\n", str);
-      break;
       expr(str, &tmp);
     }else{
       printf("ans = %s\n", str);
