@@ -6,18 +6,41 @@
 #include <string.h>
 
 // this should be enough
-static char buf[65536] = {};
+static char buf[65536] = {0};
 static char code_buf[65536 + 128] = {}; // a little larger than `buf`
 static char *code_format =
 "#include <stdio.h>\n"
 "int main() { "
 "  unsigned result = %s; "
-"  printf(\"%%u\", result); "
+"  printf(\"%%d\", result); "
 "  return 0; "
 "}";
 
+static inline void gen_num() {
+  char str[32];
+  sprintf(str, "%d", rand());
+  strcat(buf, str);
+}
+
+static inline void gen(char c) {
+  char str[2] = {0};
+  str[0] = c;
+  strcat(buf, str);
+}
+
+static inline void gen_rand_op() {
+  char str[2] = {0};
+  char table[4] = {'+', '-', '*', '/'};
+  str[0] = table[rand()%4];
+  strcat(buf, str);
+}
+
 static inline void gen_rand_expr() {
-  buf[0] = '\0';
+  switch (rand() % 3) {
+    case 0: gen_num(); break;
+    case 1: gen('('); gen_rand_expr(); gen(')'); break;
+    default: gen_rand_expr(); gen_rand_op(); gen_rand_expr(); break;
+  }
 }
 
 int main(int argc, char *argv[]) {
@@ -29,6 +52,7 @@ int main(int argc, char *argv[]) {
   }
   int i;
   for (i = 0; i < loop; i ++) {
+    buf[0] = '\0';
     gen_rand_expr();
 
     sprintf(code_buf, code_format, buf);
@@ -48,7 +72,7 @@ int main(int argc, char *argv[]) {
     fscanf(fp, "%d", &result);
     pclose(fp);
 
-    printf("%u %s\n", result, buf);
+    printf("%d %s\n", result, buf);
   }
   return 0;
 }

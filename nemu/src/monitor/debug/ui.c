@@ -42,7 +42,7 @@ static int cmd_help(char *args);
 static int cmd_si(char *args);    // [x] 2023/5/13/14:20
 static int cmd_info(char *args);  
 // static int cmd_x(char *args);
-static int cmd_p(char *args);     // [x] 2023/5/14/11:41
+static int cmd_p(char *args);     // [x] 2023/5/14/12:31
 
 static struct {
   char *name;

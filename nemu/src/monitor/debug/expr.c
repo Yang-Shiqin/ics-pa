@@ -99,8 +99,7 @@ bool check_parentheses(int p, int q, bool *err){
   return flag;
 }
 
-// p 1+--(2+34)
-// ysq  // 2023/5/14/11:41
+// ysq  // 2023/5/14/12:31
 // 解析表达式（暂时只考虑数字、括号、+-*/
 // p: 表达式开头，tokens下标
 // q: 表达式结尾，包括q的token
@@ -138,8 +137,6 @@ int eval(int p, int q, bool *err) {
     if (*err==true) {
       return 0;
     }
-    // if (tokens[p].type=='+') return eval(p+1, q, err);   // +expr
-    // if (tokens[p].type=='-') return -eval(p+1, q, err);  // -expr
     int op = -1;
     int top = -1; // 在括号里
     int i;
@@ -172,7 +169,6 @@ int eval(int p, int q, bool *err) {
       }
     }
     int val1 = 0;
-    printf("op=%d\n", op);
     if (op!=p || (tokens[op].type!='+'&&tokens[op].type!='-')) val1 = eval(p, op - 1, err);
     int val2 = eval(op + 1, q, err);
 
