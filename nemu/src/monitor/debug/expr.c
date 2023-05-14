@@ -173,7 +173,7 @@ int eval(int p, int q, bool *err) {
     }
     int val1 = 0;
     printf("op=%d\n", op);
-    if (op!=p || (tokens[op].type!='+'||tokens[op].type!='-')) val1 = eval(p, op - 1, err);
+    if (op!=p || (tokens[op].type!='+'&&tokens[op].type!='-')) val1 = eval(p, op - 1, err);
     int val2 = eval(op + 1, q, err);
 
     switch (tokens[op].type) {
