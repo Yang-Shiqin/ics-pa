@@ -5,6 +5,8 @@ int is_exit_status_bad();
 #define TEST_EXPR 1
 #if TEST_EXPR
 #include "monitor/debug/expr.h"
+#include <regex.h>
+#include <stdlib.h>
 #endif
 
 int main(int argc, char *argv[]) {
