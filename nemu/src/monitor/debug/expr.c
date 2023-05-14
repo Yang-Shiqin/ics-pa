@@ -92,8 +92,8 @@ bool check_parentheses(int p, int q, bool *err){
       }
       break;
     default:
-      if (i==q) flag=false; // 第一个不是(
-      break;
+      if (i==p) flag=false; // 第一个不是(
+      continue;
     }
   }
   return flag;
