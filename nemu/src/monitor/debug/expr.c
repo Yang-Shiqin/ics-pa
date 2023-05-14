@@ -87,7 +87,7 @@ bool check_parentheses(int p, int q, bool *err){
         return false;
       }
       top--;
-      if (top==0 && i!=q) {   // 非最后一个 把第一个括号匹配掉了
+      if (top==-1 && i!=q) {   // 非最后一个 把第一个括号匹配掉了
         flag = false;
       }
       break;
@@ -96,7 +96,6 @@ bool check_parentheses(int p, int q, bool *err){
       continue;
     }
   }
-  printf("flag=%d", flag);
   return flag;
 }
 
