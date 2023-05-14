@@ -4,9 +4,12 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
+#include <stdlib.h>
 
 enum {
   TK_NOTYPE = 256, TK_EQ,
+  TK_XNUM,
+  TK_ONUM,
   TK_DNUM,
   /* TODO: Add more token types */
 
@@ -26,6 +29,8 @@ static struct rule {
   {"\\-", '-'},         // sub
   {"\\*", '*'},         // mul
   {"/", '/'},           // div
+  {"0x[0-9a-fA-F]+", TK_XNUM},      // 十六进制数
+  {"0[0-7]+", TK_ONUM}, // 八进制数
   {"[0-9]+", TK_DNUM},  // 十进制数
   {"\\(", '('},         // 左括号
   {"\\)", ')'},         // 右括号
@@ -61,37 +66,120 @@ typedef struct token {
 static Token tokens[32] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
-// uint32_t eval(uint32_t p, uint32_t q, bool *err) {
-//   if (p > q) {
-//     /* Bad expression */
-//     printf()
-//   }
-//   else if (p == q) {
-//     /* Single token.
-//      * For now this token should be a number.
-//      * Return the value of the number.
-//      */
-//   }
-//   else if (check_parentheses(p, q) == true) {
-//     /* The expression is surrounded by a matched pair of parentheses.
-//      * If that is the case, just throw away the parentheses.
-//      */
-//     return eval(p + 1, q - 1);
-//   }
-//   else {
-//     op = the position of 主运算符 in the token expression;
-//     val1 = eval(p, op - 1);
-//     val2 = eval(op + 1, q);
+// ysq
+// 检查括号配对，若括号不配对，*err=true；若配对且最外面的能去掉，返回true，否则返回false
+// p: 表达式开头，tokens下标
+// q: 表达式结尾，包括q的token
+// err: 是否发生错误，1为错误
+bool check_parentheses(int p, int q, bool *err){
+  int top=-1;
+  int i;
+  bool flag=true;
+  for(i=p; i<=q; i++){
+    switch (tokens[i].type)
+    {
+    case '(':
+      top++;
+      break;
+    case ')':
+      if (top==-1) {
+        *err = true;
+        return false;
+      }
+      top--;
+      if (top==0 && i!=q) {   // 非最后一个 把第一个括号匹配掉了
+        flag = false;
+      }
+      break;
+    default:
+      if (i==q) flag=false; // 第一个不是(
+      continue;
+    }
+  }
+  return flag;
+}
 
-//     switch (op_type) {
-//       case '+': return val1 + val2;
-//       case '-': /* ... */
-//       case '*': /* ... */
-//       case '/': /* ... */
-//       default: assert(0);
-//     }
-//   }
-// }
+
+// ysq
+// 解析表达式（暂时只考虑数字、括号、+-*/
+// p: 表达式开头，tokens下标
+// q: 表达式结尾，包括q的token
+// err: 是否发生错误，1为错误（传入的时候就要为0
+int eval(int p, int q, bool *err) {
+  if (*err==true) {
+    return 0;
+  }
+  if (p > q) {
+    /* Bad expression */ // 如()
+    printf("Bad expression\n");
+    *err = true;
+    return 0;
+  }
+  else if (p == q) {
+    /* Single token.
+     * For now this token should be a number.
+     * Return the value of the number.
+     */
+    if ((tokens[p].type!=TK_XNUM)||(tokens[p].type!=TK_ONUM)||(tokens[p].type!=TK_DNUM)){ // 非数
+      printf("Single token but not num\n");
+      *err = true;
+      return 0;
+    }
+    // str2num
+    return strtol(tokens[p].str, NULL, 0);
+  }
+  else if (check_parentheses(p, q, err) == true) {
+    /* The expression is surrounded by a matched pair of parentheses.
+     * If that is the case, just throw away the parentheses.
+     */
+    return eval(p + 1, q - 1, err);
+  }
+  else {
+    if (*err==true) {
+      return 0;
+    }
+    int op = -1;
+    int top = -1; // 在括号里
+    int i;
+    int quit=0;
+    for (i=q; i>=p && !quit; i--) {
+      switch (tokens[i].type)
+      {
+      case '(':
+        top--;  // 经过check_parentheses默认括号是配对的
+        break;
+      case ')':
+        top++;
+        break;
+      case '+':
+      case '-':
+        if (top == -1){ // 括号外
+          op = i;
+          quit=1;
+        }
+        break;
+      case '*':
+      case '/':
+        if (top==-1 && op==-1){ // 括号外且是右边第一个
+          op = i;
+        }
+        break;
+      default:
+        continue;
+      }
+    }
+    int val1 = eval(p, op - 1, err);
+    int val2 = eval(op + 1, q, err);
+
+    switch (tokens[op].type) {
+      case '+': return val1 + val2;
+      case '-': return val1 - val2;
+      case '*': return val1 * val2;
+      case '/': return val1 / val2;
+      default: assert(0);
+    }
+  }
+}
 
 static bool make_token(char *e) {
   int position = 0;
@@ -165,10 +253,9 @@ word_t expr(char *e, bool *success) {
 
   /* TODO: Insert codes to evaluate the expression. */
   TODO();
-  int i;
-  for(i=0; i<nr_token; i++){
-    printf("%s ", tokens[i].str);
-  }
+  static uint32_t No=0;
+  bool err=0;
+  printf("$%u=%d\n", ++No, eval(0, nr_token-1, &err));
 
   return 0;
 }
