@@ -32,7 +32,6 @@ int main(int argc, char *argv[]) {
     }else{
       printf("ans = %s\n", str);
     }
-    break;
   }
 
   // 关闭文件
