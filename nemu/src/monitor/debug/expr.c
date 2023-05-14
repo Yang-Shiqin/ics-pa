@@ -254,7 +254,7 @@ word_t expr(char *e, bool *success) {
   /* TODO: Insert codes to evaluate the expression. */
   static uint32_t No=0;
   bool err=0;
-  printf("$%u=%d\n", ++No, eval(0, nr_token-1, &err));
+  printf("$%u=%d\n", ++No, eval(0, nr_token, &err));
 
   return 0;
 }
