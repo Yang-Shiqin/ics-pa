@@ -133,20 +133,10 @@ int eval(int p, int q, bool *err) {
     }
     // str2num
     if (tokens[p].type==TK_REG){
-      const char *regsl[] = {"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi"};
-      const char *regsw[] = {"ax", "cx", "dx", "bx", "sp", "bp", "si", "di"};
-      const char *regsb[] = {"al", "cl", "dl", "bl", "ah", "ch", "dh", "bh"};
-      int i;
-      for (i=0; i<8; i++){
-        if (strcmp(tokens[p].str, regsl[i])==0){
-          return cpu.gpr[i]._32;
-        }
-        if (strcmp(tokens[p].str, regsw[i])==0){
-          return cpu.gpr[i]._16;
-        }
-        if (strcmp(tokens[p].str, regsb[i])==0){
-          return cpu.gpr[i/2]._8[i%2];
-        }
+      bool success=true;
+      int ans = isa_reg_str2val(tokens[p].str, &success);
+      if (success==true) {
+        return ans;
       }
       *err = true;
       printf("No reg named %s\n", tokens[p].str);

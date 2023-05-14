@@ -51,5 +51,22 @@ void isa_reg_display() {
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
+  int i = 0;
+  for (i=R_EAX; i<=R_EDI; i++){
+    if (strcmp(s, regsl[i])==0){
+      return cpu.gpr[i]._32;
+    }
+  }
+  for (i=R_AX; i<=R_DI; i++){
+    if (strcmp(s, regsw[i])==0){
+      return cpu.gpr[i]._16;
+    }
+  }
+  for (i=R_AL; i<=R_BH; i++){
+    if (strcmp(s, regsb[i])==0){
+      return cpu.gpr[i/2]._8[i%2];
+    }
+  }
+  *success = false;
   return 0;
 }
