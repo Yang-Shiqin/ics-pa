@@ -26,6 +26,7 @@ int main(int argc, char *argv[]) {
   while (fscanf(fp, "%s", str) != EOF) {
     c = !c;
     if(c){
+      break;
       expr(str, &tmp);
     }else{
       printf("ans = %s\n", str);
