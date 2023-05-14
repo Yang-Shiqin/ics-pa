@@ -40,7 +40,7 @@ static struct rule {
   {"==", TK_EQ},        // equal
   {"!=", TK_NE},        // not equal
   {"&&", TK_AND},       // 逻辑与
-  {"\\$", TK_REG},      // 寄存器值
+  {"\\$[a-z]+", TK_REG},      // 寄存器值
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
