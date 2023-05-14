@@ -110,14 +110,12 @@ int eval(int p, int q, bool *err) {
     return 0;
   }
   if (p > q) {
-    printf("1\n");
     /* Bad expression */ // 如()
     printf("Bad expression: p=%d, q=%d\n", p, q);
     *err = true;
     return 0;
   }
   else if (p == q) {
-    printf("2\n");
     /* Single token.
      * For now this token should be a number.
      * Return the value of the number.
@@ -131,15 +129,12 @@ int eval(int p, int q, bool *err) {
     return strtol(tokens[p].str, NULL, 0);
   }
   else if (check_parentheses(p, q, err) == true) {
-    printf("3\n");
     /* The expression is surrounded by a matched pair of parentheses.
      * If that is the case, just throw away the parentheses.
      */
-    printf("(%d)\n", eval(p + 1, q - 1, err));
     return eval(p + 1, q - 1, err);
   }
   else {
-    printf("4\n");
     if (*err==true) {
       return 0;
     }
@@ -175,7 +170,6 @@ int eval(int p, int q, bool *err) {
     }
     int val1 = eval(p, op - 1, err);
     int val2 = eval(op + 1, q, err);
-    printf("val1 = %d, val2 = %d\n", val1, val2);
 
     switch (tokens[op].type) {
       case '+': return val1 + val2;
