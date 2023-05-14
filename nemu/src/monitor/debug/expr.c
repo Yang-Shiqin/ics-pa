@@ -7,10 +7,14 @@
 #include <stdlib.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
+  TK_NOTYPE = 256, 
   TK_XNUM,
   TK_ONUM,
   TK_DNUM,
+  TK_EQ,
+  TK_NE,
+  TK_AND,
+  TK_REG,
   /* TODO: Add more token types */
 
 };
@@ -35,6 +39,9 @@ static struct rule {
   {"\\(", '('},         // 左括号
   {"\\)", ')'},         // 右括号
   {"==", TK_EQ},        // equal
+  {"!=", TK_NE},        // not equal
+  {"&&", TK_AND},       // 逻辑与
+  {"\\$", TK_REG},      // 寄存器值
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -109,7 +116,7 @@ int eval(int p, int q, bool *err) {
     return 0;
   }
   if (p > q) {
-    /* Bad expression */ // 如()
+    /* Bad expression */
     printf("Bad expression: p=%d, q=%d\n", p, q);
     *err = true;
     return 0;
@@ -137,36 +144,56 @@ int eval(int p, int q, bool *err) {
     if (*err==true) {
       return 0;
     }
-    int op = -1;
+    int op = -1;  // 主符号下标
+    int op_pr = -1;  // 当前所选主符号优先级
     int top = -1; // 在括号里
     int i;
-    int quit=0;
-    for (i=q; i>=p && !quit; i--) {
+    for (i=p; i<=q; i++) {
       switch (tokens[i].type)
       {
-      case '(':
+      case '(':   // 优先级1
         top--;  // 经过check_parentheses默认括号是配对的
         break;
       case ')':
         top++;
         break;
-      case '+':
+      case '+':   // 优先级5
       case '-':
-        if (top == -1){ // 括号外
-          while(i>=p && (tokens[i].type=='+'||tokens[i].type=='-'||tokens[i].type=='*'||tokens[i].type=='/')) i--;
-          op = i+1;
-          quit=1;
+        if (top == -1 && op_pr<=5){ // 括号外且优先级低于等于当前主操作符
+          op = i;
+          op_pr=5;
         }
         break;
-      case '*':
+      case '*':   // 优先级4
       case '/':
-        if (top==-1 && op==-1){ // 括号外且是右边第一个
+        if (top==-1 && op_pr<=4){ // 括号外
           op = i;
+          op_pr = 4;
+        }
+        break;
+      case TK_EQ: // 优先级8
+      case TK_NE:
+        if (top==-1 && op_pr<=8){ // 括号外
+          op = i;
+          op_pr = 8;
+        }
+        break;
+      case TK_AND:  // 优先级12
+        if (top==-1 && op_pr<=12){ // 括号外
+          op = i;
+          op_pr = 8;
         }
         break;
       default:
         continue;
       }
+      while(i<=q && (tokens[i].type=='+'||      // 连续操作符只有最左边才能是主操作符
+                     tokens[i].type=='-'||
+                     tokens[i].type=='*'||
+                     tokens[i].type=='/'||
+                     tokens[i].type==TK_EQ||
+                     tokens[i].type==TK_NE||
+                     tokens[i].type==TK_AND)) i++;
     }
     int val1 = 0;
     if (op!=p || (tokens[op].type!='+'&&tokens[op].type!='-')) val1 = eval(p, op - 1, err);
@@ -177,6 +204,9 @@ int eval(int p, int q, bool *err) {
       case '-': return val1 - val2;
       case '*': return val1 * val2;
       case '/': return val1 / val2;
+      case TK_EQ: return val1 == val2;
+      case TK_NE: return val1 != val2;
+      case TK_AND: return val1 && val2;
       default: 
         *err=true;
         printf("Fault op: %d(%c)\n", tokens[op].type, (char)tokens[op].type);
@@ -217,12 +247,19 @@ static bool make_token(char *e) {
           case '/':
           case '(':
           case ')':
+          case TK_EQ:
+          case TK_NE:
+          case TK_AND:
             nr_token++;
             break;
           case TK_XNUM:
           case TK_ONUM:
           case TK_DNUM:
             strncpy(tokens[nr_token].str, substr_start, substr_len);
+            tokens[nr_token++].str[substr_len] = '\0';
+            break;
+          case TK_REG:
+            strncpy(tokens[nr_token].str, substr_start+1, substr_len);
             tokens[nr_token++].str[substr_len] = '\0';
             break;
           case TK_NOTYPE:
