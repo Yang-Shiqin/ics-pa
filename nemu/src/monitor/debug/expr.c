@@ -100,7 +100,7 @@ bool check_parentheses(int p, int q, bool *err){
 }
 
 
-// ysq
+// ysq  // 2023/5/14/10:47
 // 解析表达式（暂时只考虑数字、括号、+-*/
 // p: 表达式开头，tokens下标
 // q: 表达式结尾，包括q的token
@@ -132,6 +132,7 @@ int eval(int p, int q, bool *err) {
     /* The expression is surrounded by a matched pair of parentheses.
      * If that is the case, just throw away the parentheses.
      */
+    printf("(%d)\n", eval(p + 1, q - 1, err));
     return eval(p + 1, q - 1, err);
   }
   else {
