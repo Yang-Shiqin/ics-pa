@@ -7,6 +7,7 @@ int is_exit_status_bad();
 #include "monitor/debug/expr.h"
 #include <regex.h>
 #include <stdlib.h>
+#include "isa/x86.h"
 #endif
 
 int main(int argc, char *argv[]) {
