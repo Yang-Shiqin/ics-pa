@@ -11,7 +11,7 @@ int main(int argc, char *argv[]) {
 #if TEST_EXPR
   /* test expr */
   FILE *fp;
-  char str[1024];
+  char str[1024]={0};
   bool c=true;
   bool tmp=true;
 
