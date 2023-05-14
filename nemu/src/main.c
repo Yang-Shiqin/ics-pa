@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
   /* test expr */
   FILE *fp;
   char str[1024];
-  bool c=false;
+  bool c=true;
   bool tmp=true;
 
   // 打开文件
