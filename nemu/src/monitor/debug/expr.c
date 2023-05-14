@@ -61,6 +61,38 @@ typedef struct token {
 static Token tokens[32] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
+// uint32_t eval(uint32_t p, uint32_t q, bool *err) {
+//   if (p > q) {
+//     /* Bad expression */
+//     printf()
+//   }
+//   else if (p == q) {
+//     /* Single token.
+//      * For now this token should be a number.
+//      * Return the value of the number.
+//      */
+//   }
+//   else if (check_parentheses(p, q) == true) {
+//     /* The expression is surrounded by a matched pair of parentheses.
+//      * If that is the case, just throw away the parentheses.
+//      */
+//     return eval(p + 1, q - 1);
+//   }
+//   else {
+//     op = the position of 主运算符 in the token expression;
+//     val1 = eval(p, op - 1);
+//     val2 = eval(op + 1, q);
+
+//     switch (op_type) {
+//       case '+': return val1 + val2;
+//       case '-': /* ... */
+//       case '*': /* ... */
+//       case '/': /* ... */
+//       default: assert(0);
+//     }
+//   }
+// }
+
 static bool make_token(char *e) {
   int position = 0;
   int i;
