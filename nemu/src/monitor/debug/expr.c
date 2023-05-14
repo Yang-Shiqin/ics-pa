@@ -111,7 +111,7 @@ int eval(int p, int q, bool *err) {
   }
   if (p > q) {
     /* Bad expression */ // 如()
-    printf("Bad expression\n");
+    printf("Bad expression: p=%d, q=%d\n", p, q);
     *err = true;
     return 0;
   }
@@ -180,7 +180,7 @@ int eval(int p, int q, bool *err) {
       case '/': return val1 / val2;
       default: 
         *err=true;
-        printf("Fault op: %c\n", (char)tokens[op].type);
+        printf("Fault op: %d(%c)\n", tokens[op].type, (char)tokens[op].type);
         return 0;
     }
   }
