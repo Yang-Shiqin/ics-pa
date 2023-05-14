@@ -176,7 +176,10 @@ int eval(int p, int q, bool *err) {
       case '-': return val1 - val2;
       case '*': return val1 * val2;
       case '/': return val1 / val2;
-      default: assert(0);
+      default: 
+        *err=true;
+        printf("Fault op\n");
+        return 0;
     }
   }
 }
@@ -253,7 +256,9 @@ word_t expr(char *e, bool *success) {
 
   /* TODO: Insert codes to evaluate the expression. */
   static uint32_t No=0;
-  bool err=0;
-  printf("$%u=%d\n", ++No, eval(0, nr_token, &err));
+  bool err=false;
+  int val = eval(0, nr_token, &err);
+  if(err==false)
+    printf("$%u=%d\n", ++No, val);
   return 0;
 }
