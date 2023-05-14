@@ -60,10 +60,10 @@ void init_regex() {
 
 typedef struct token {
   int type;
-  char str[320];
+  char str[32];
 } Token;
 
-static Token tokens[32] __attribute__((used)) = {};
+static Token tokens[320] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
 // ysq
