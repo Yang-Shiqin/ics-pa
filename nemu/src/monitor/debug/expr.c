@@ -156,7 +156,7 @@ int eval(int p, int q, bool *err) {
       case '+':
       case '-':
         if (top == -1){ // 括号外
-          while(i>-1 && (tokens[i].type=='+'||tokens[i].type=='-'||tokens[i].type=='*'||tokens[i].type=='/')) i--;
+          while(i>=p && (tokens[i].type=='+'||tokens[i].type=='-'||tokens[i].type=='*'||tokens[i].type=='/')) i--;
           op = i+1;
           quit=1;
         }
