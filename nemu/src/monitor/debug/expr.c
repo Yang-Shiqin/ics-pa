@@ -1,4 +1,5 @@
 #include <isa.h>
+#include "memory/vaddr.h"
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
  */
@@ -216,13 +217,18 @@ int eval(int p, int q, bool *err) {
                      tokens[i].type==TK_AND)) i++;
     }
     int val1 = 0;
-    if (op!=p || (tokens[op].type!='+'&&tokens[op].type!='-')) val1 = eval(p, op - 1, err);
+    if (op!=p || (tokens[op].type!='+'&&tokens[op].type!='-'&&tokens[op].type!='*')) val1 = eval(p, op - 1, err);
     int val2 = eval(op + 1, q, err);
 
     switch (tokens[op].type) {
       case '+': return val1 + val2;
       case '-': return val1 - val2;
-      case '*': return val1 * val2;
+      case '*': 
+        if (op==p){
+          return vaddr_read(val2, 4);
+        }else{
+          return val1 * val2;
+        }
       case '/': return val1 / val2;
       case TK_EQ: return val1 == val2;
       case TK_NE: return val1 != val2;
