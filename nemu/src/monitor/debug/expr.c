@@ -171,6 +171,7 @@ int eval(int p, int q, bool *err) {
     }
     int val1 = eval(p, op - 1, err);
     int val2 = eval(op + 1, q, err);
+    printf("val1 = %d, val2 = %d\n", val1, val2);
 
     switch (tokens[op].type) {
       case '+': return val1 + val2;
@@ -179,7 +180,7 @@ int eval(int p, int q, bool *err) {
       case '/': return val1 / val2;
       default: 
         *err=true;
-        printf("Fault op\n");
+        printf("Fault op: %c\n", (char)tokens[op].type);
         return 0;
     }
   }
