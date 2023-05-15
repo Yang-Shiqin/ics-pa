@@ -40,9 +40,11 @@ static int cmd_q(char *args) {
 // 通过ui_mainloop可知args就是除去第一个子字符串剩下的字符串
 static int cmd_help(char *args);
 static int cmd_si(char *args);    // [x] 2023/5/13/14:20
-static int cmd_info(char *args);  
+static int cmd_info(char *args);  // [x] 2023/5/15/20:53
 // static int cmd_x(char *args);
 static int cmd_p(char *args);     // [x] 2023/5/14/17:24(暂时还没怎么测试)
+static int cmd_w(char *args);
+// static int cmd_d(char *args);
 
 static struct {
   char *name;
@@ -56,8 +58,8 @@ static struct {
   { "info", "generic cmd for showing things about the program being debugged: info r/info w", cmd_info },
 //   { "x", "examine memory", cmd_x },
   { "p", "Print value of expression EXP.", cmd_p },
-//   { "w", "examine memory", cmd_w },
-//   { "d", "examine memory", cmd_d },
+  { "w", "Set a watchpoint for EXPRESSION.", cmd_w },
+//   { "d", "Delete all or some watchpoints.", cmd_d },
 
   /* TODO: Add more commands */
 
@@ -123,8 +125,8 @@ static int cmd_info(char *args){
   }
   if (strcmp(args, "r") == 0){
     isa_reg_display();
-  }else if (strcmp(args, "w") == 0){
-    // todo
+  }else if (strcmp(args, "w") == 0){  // 目前只能打印全部
+    wp_display();
   }else
     printf("Undefined info command: \"%s\".  Try \"help info\"\n", args);
   return 0;
@@ -135,6 +137,12 @@ static int cmd_p(char *args){
   expr(args, &success);
   return 0;
 }
+
+static int cmd_w(char *args){
+  // new_wp
+  return 0;
+}
+
 
 void ui_mainloop() {
   if (is_batch_mode()) {
