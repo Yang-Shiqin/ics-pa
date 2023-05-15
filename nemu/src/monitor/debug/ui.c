@@ -56,6 +56,8 @@ static struct {
   { "info", "generic cmd for showing things about the program being debugged: info r/info w", cmd_info },
 //   { "x", "examine memory", cmd_x },
   { "p", "Print value of expression EXP.", cmd_p },
+//   { "w", "examine memory", cmd_w },
+//   { "d", "examine memory", cmd_d },
 
   /* TODO: Add more commands */
 
