@@ -1,5 +1,5 @@
 #include <isa.h>
-#include "memory/vaddr.h"
+#include "memory/vaddr.h"   // 这样不好，但我调用vaddr_read
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
  */

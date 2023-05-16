@@ -1,6 +1,7 @@
 #include <isa.h>
 #include "expr.h"
 #include "watchpoint.h"
+#include "memory/vaddr.h"   // 这样不好，但我调用vaddr_read
 
 #include <stdlib.h>
 #include <readline/readline.h>
@@ -56,7 +57,7 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "si", "step one instruction exactly", cmd_si },
   { "info", "generic cmd for showing things about the program being debugged: info r/info w", cmd_info },
-  { "x", "examine memory", cmd_x },
+  { "x", "examine memory: x N Addr", cmd_x },
   { "p", "Print value of expression EXP.", cmd_p },
   { "w", "Set a watchpoint for EXPRESSION.", cmd_w },
   { "d", "Delete all or some watchpoints.", cmd_d },
@@ -133,30 +134,66 @@ static int cmd_info(char *args){
 }
 
 static int cmd_x(char *args){
+  if(args == NULL){                    /*没参数，打印x用法*/
+    cmd_help("x");
+    return 0;
+  }
+  char *arg = strtok(NULL, " ");
+  char* second_args = arg+strlen(arg)+1;
+  bool success=true;
+  uint32_t len = expr(arg, &success);  // 长度
+  uint32_t val = expr(second_args, &success);  // 地址
+  if (true==success){
+    uint32_t i;
+    for (i=0; i<len; i++)
+      printf("0x%x\n", vaddr_read(val+i, 4));
+  }
+  else
+    printf("bad expr\n");
   return 0;
 }
 
 static int cmd_p(char *args){
+  if(args == NULL){                    /*没参数，打印p用法*/
+    cmd_help("p");
+    return 0;
+  }
   static uint32_t No=0;
   bool success=true;
   int val = (int)expr(args, &success);
   if (true==success)
     printf("$%u=%d\n", ++No, val);
+  else
+    printf("bad expr\n");
   return 0;
 }
 
 static int cmd_w(char *args){
+  if(args == NULL){                    /*没参数，打印w用法*/
+    cmd_help("w");
+    return 0;
+  }
   bool success=true;
   uint32_t val = expr(args, &success);  // 地址
-  WP* wp = new_wp();
-  wp->addr = val;
+  if (true==success){
+    WP* wp = new_wp();
+    wp->addr = val;
+  }else
+    printf("bad expr\n");
   return 0;
 }
 
 static int cmd_d(char *args){
+  if(args == NULL){                    /*没参数，打印d用法*/
+    cmd_help("d");
+    return 0;
+  }
   bool success=true;
   uint32_t val = expr(args, &success);  // 序号
-  free_wp(val);
+  if (true==success)
+    free_wp(val);
+  else
+    printf("bad expr\n");
   return 0;
 }
 
