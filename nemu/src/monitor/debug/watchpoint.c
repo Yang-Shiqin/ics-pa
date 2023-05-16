@@ -1,5 +1,6 @@
 #include "watchpoint.h"
 #include "expr.h"
+#include "memory/vaddr.h"   // 这样不好，但我调用vaddr_read
 
 #define NR_WP 32    // 多于32会assert(0)
 
@@ -13,6 +14,7 @@ void init_wp_pool() { // 对head和free_初始化
     // TODO: init new member
     wp_pool[i].hit_time = 0;
     wp_pool[i].addr = 0;
+    wp_pool[i].last_val = 0;
     wp_pool[i].next = &wp_pool[i + 1];
   }
   wp_pool[NR_WP - 1].next = NULL;
@@ -62,6 +64,7 @@ void free_wp(uint32_t NO){
   wp->hit_time = 0;
   wp->next = NULL;
   wp->addr = 0;
+  wp->last_val = 0;
   if (NULL == free_){
     free_ = wp;
     return;
@@ -86,4 +89,24 @@ void wp_display(){
   }
   printf("Num     Address\n");
   wp_recu_display(head);
+}
+
+void check_recu_wp(WP* wp, bool* stop){
+  if (NULL == wp) return;
+  check_recu_wp(wp->next, stop);
+  uint32_t new_v = vaddr_read(wp->addr, 4);
+  if (wp->last_val!=new_v) {
+    printf("watchpoint %u: 0x%x\n\n", wp->NO, wp->addr);
+    printf("Old value = %u\n", wp->last_val);   // 统一用uint32_t，只有p是用int
+    printf("New value = %u\n", new_v);          // 统一用uint32_t，只有p是用int
+    wp->last_val = new_v;
+    *stop = true;
+    // todo: 应当打印中断的代码但我不知道咋打（暂时没打
+  }
+}
+
+bool check_wp(){  // 全打印，stop为是否改变而暂停
+  bool stop=false;
+  check_recu_wp(head, &stop);
+  return stop;
 }

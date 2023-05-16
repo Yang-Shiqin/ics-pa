@@ -178,6 +178,7 @@ static int cmd_w(char *args){
   if (true==success){
     WP* wp = new_wp();
     wp->addr = val;
+    wp->last_val = vaddr_read(val, 4);
   }else
     printf("bad expr\n");
   return 0;
