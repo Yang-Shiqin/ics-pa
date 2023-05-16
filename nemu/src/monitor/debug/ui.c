@@ -133,8 +133,11 @@ static int cmd_info(char *args){
 }
 
 static int cmd_p(char *args){
+  static uint32_t No=0;
   bool success;
-  expr(args, &success);
+  int val = (int)expr(args, &success);
+  if (true==success)
+    printf("$%u=%d\n", ++No, val);
   return 0;
 }
 
