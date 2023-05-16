@@ -39,7 +39,7 @@ WP* new_wp(){
 
 void free_wp(uint32_t NO){
   if (NO > NR_WP) {
-    printf("no watchpoint %u\n", NO);
+    printf("no watchpoint number %u\n", NO);
     return;
   }
   WP *wp = &wp_pool[NO];
@@ -52,7 +52,7 @@ void free_wp(uint32_t NO){
       if (prev->next==wp) break;
     }
     if (NULL==prev || NULL==prev->next){
-      printf("watchpoint %u is already freed\n", wp->NO);
+      printf("No watchpoint number %u\n", wp->NO);
       return;
     }
     prev->next = wp->next;
