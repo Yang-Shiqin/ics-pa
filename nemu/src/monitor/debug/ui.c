@@ -41,7 +41,7 @@ static int cmd_q(char *args) {
 static int cmd_help(char *args);
 static int cmd_si(char *args);    // [x] 2023/5/13/14:20
 static int cmd_info(char *args);  // [x] 2023/5/15/20:53
-// static int cmd_x(char *args);
+static int cmd_x(char *args);
 static int cmd_p(char *args);     // [x] 2023/5/14/17:24(暂时还没怎么测试,没有识别变量名)
 static int cmd_w(char *args);     // [x] 2023/5/16/09:36(功能限制于expr)
 static int cmd_d(char *args);     // [x] 2023/5/16/09:47
@@ -56,7 +56,7 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "si", "step one instruction exactly", cmd_si },
   { "info", "generic cmd for showing things about the program being debugged: info r/info w", cmd_info },
-//   { "x", "examine memory", cmd_x },
+  { "x", "examine memory", cmd_x },
   { "p", "Print value of expression EXP.", cmd_p },
   { "w", "Set a watchpoint for EXPRESSION.", cmd_w },
   { "d", "Delete all or some watchpoints.", cmd_d },
@@ -129,6 +129,10 @@ static int cmd_info(char *args){
     wp_display();
   }else
     printf("Undefined info command: \"%s\".  Try \"help info\"\n", args);
+  return 0;
+}
+
+static int cmd_x(char *args){
   return 0;
 }
 
