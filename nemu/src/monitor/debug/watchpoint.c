@@ -37,11 +37,12 @@ WP* new_wp(){
   return wp;
 }
 
-void free_wp(WP *wp){
-  if (NULL==wp) {
-    printf("NULL cannot be freed\n");
+void free_wp(uint32_t NO){
+  if (NO > NR_WP) {
+    printf("no watchpoint %u\n", NO);
     return;
   }
+  WP *wp = &wp_pool[NO];
   WP *prev = head;
   // 把wp移出head
   if (wp==head) {
@@ -51,7 +52,7 @@ void free_wp(WP *wp){
       if (prev->next==wp) break;
     }
     if (NULL==prev || NULL==prev->next){
-      printf("watchpoint 0x%x is already freed\n", wp->addr);
+      printf("watchpoint %u is already freed\n", wp->NO);
       return;
     }
     prev->next = wp->next;
