@@ -48,10 +48,11 @@ void free_wp(uint32_t NO){
   if (wp==head) {
     head = head->next;
   }else{
-    while(prev && prev->next){
+    while(prev){
       if (prev->next==wp) break;
+      prev = prev->next;
     }
-    if (NULL==prev || NULL==prev->next){
+    if (NULL==prev){
       printf("No watchpoint number %u\n", wp->NO);
       return;
     }
