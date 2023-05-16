@@ -139,6 +139,8 @@ static int cmd_p(char *args){
 }
 
 static int cmd_w(char *args){
+  bool success;
+  expr(args, &success);
   // new_wp
   return 0;
 }

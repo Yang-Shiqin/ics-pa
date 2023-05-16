@@ -302,10 +302,11 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  static uint32_t No=0;
+  // static uint32_t No=0;
   bool err=false;
   int val = eval(0, nr_token-1, &err);
-  if(err==false)
-    printf("$%u=%d\n", ++No, val);
-  return 0;
+  if(err==true)
+    *success = false;
+    // printf("$%u=%d\n", ++No, val);
+  return val;
 }
