@@ -142,9 +142,10 @@ static int cmd_p(char *args){
 }
 
 static int cmd_w(char *args){
-  bool success;
-  expr(args, &success);
-  // new_wp
+  bool success=true;
+  uint32_t val = expr(args, &success);  // 地址
+  WP* wp = new_wp();
+  wp->addr = val;
   return 0;
 }
 

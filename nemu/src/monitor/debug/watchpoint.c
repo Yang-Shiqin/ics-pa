@@ -12,7 +12,7 @@ void init_wp_pool() { // 对head和free_初始化
     wp_pool[i].NO = i;
     // TODO: init new member
     wp_pool[i].hit_time = 0;
-    wp_pool[i].what[0] = 0;
+    wp_pool[i].addr = 0;
     wp_pool[i].next = &wp_pool[i + 1];
   }
   wp_pool[NR_WP - 1].next = NULL;
@@ -51,7 +51,7 @@ void free_wp(WP *wp){
       if (prev->next==wp) break;
     }
     if (NULL==prev || NULL==prev->next){
-      printf("%s is already freed\n", wp->what);
+      printf("watchpoint 0x%x is already freed\n", wp->addr);
       return;
     }
     prev->next = wp->next;
@@ -59,7 +59,7 @@ void free_wp(WP *wp){
   // 把wp移入free_
   wp->hit_time = 0;
   wp->next = NULL;
-  wp->what[0] = 0;
+  wp->addr = 0;
   if (NULL == free_){
     free_ = wp;
     return;
@@ -72,7 +72,7 @@ void free_wp(WP *wp){
 void wp_recu_display(WP* wp){
   if (NULL==wp) return;
   wp_recu_display(wp->next);
-  printf("%-8d%s\n", wp->NO, wp->what);
+  printf("%-8d0x%x\n", wp->NO, wp->addr);
   if (wp->hit_time)
     printf("watchpoint already hit %u time\n", wp->hit_time);
 }
@@ -82,6 +82,6 @@ void wp_display(){
     printf("No watchpoints.\n");
     return;
   }
-  printf("Num     What\n");
+  printf("Num     Address\n");
   wp_recu_display(head);
 }

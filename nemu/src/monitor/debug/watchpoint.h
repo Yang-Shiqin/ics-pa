@@ -6,7 +6,7 @@
 typedef struct watchpoint {
   int NO;
   uint32_t hit_time;
-  char what[64];
+  uint32_t addr;
   struct watchpoint *next;
 
   /* TODO: Add more members if necessary */
