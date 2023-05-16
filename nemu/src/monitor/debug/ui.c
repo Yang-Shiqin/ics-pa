@@ -44,7 +44,7 @@ static int cmd_info(char *args);  // [x] 2023/5/15/20:53
 // static int cmd_x(char *args);
 static int cmd_p(char *args);     // [x] 2023/5/14/17:24(暂时还没怎么测试,没有识别变量名)
 static int cmd_w(char *args);     // [x] 2023/5/16/09:36(功能限制于expr)
-static int cmd_d(char *args);
+static int cmd_d(char *args);     // [x] 2023/5/16/09:47
 
 static struct {
   char *name;
