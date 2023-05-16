@@ -28,4 +28,5 @@
 
 #define TODO() panic("please implement me")
 
+#define DEBUG
 #endif

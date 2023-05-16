@@ -90,7 +90,7 @@ void cpu_exec(uint64_t n) {
     asm_print(this_pc, seq_pc - this_pc, n < MAX_INSTR_TO_PRINT);
 
     /* TODO: check watchpoints here. */
-    if (check_wp()) break;
+    if (check_wp()) break;  // todo: 暂时没法测试
     
 #endif
 
